@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yang.chengquiz.mapper.UserAnswerMapper">
+
+    <resultMap id="BaseResultMap" type="com.yang.chengquiz.model.entity.UserAnswer">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="appId" column="appId" jdbcType="BIGINT"/>
+        <result property="appType" column="appType" jdbcType="TINYINT"/>
+        <result property="scoringStrategy" column="scoringStrategy" jdbcType="TINYINT"/>
+        <result property="choices" column="choices" jdbcType="VARCHAR"/>
+        <result property="resultId" column="resultId" jdbcType="BIGINT"/>
+        <result property="resultName" column="resultName" jdbcType="VARCHAR"/>
+        <result property="resultDesc" column="resultDesc" jdbcType="VARCHAR"/>
+        <result property="resultPicture" column="resultPicture" jdbcType="VARCHAR"/>
+        <result property="resultScore" column="resultScore" jdbcType="INTEGER"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,appId,appType,
+        scoringStrategy,choices,resultId,
+        resultName,resultDesc,resultPicture,
+        resultScore,userId,createTime,
+        updateTime,isDelete
+    </sql>
+    <select id="doAppAnswerCount" resultType="com.yang.chengquiz.model.dto.statistic.AppAnswerCountDTO">
+        select appId, count(userId) as answerCount
+        from user_answer
+        group by appId
+        order by answerCount desc limit 10;
+    </select>
+    <select id="doAppAnswerResultCount" resultType="com.yang.chengquiz.model.dto.statistic.AppAnswerResultCountDTO">
+        select resultName, count(resultName) as resultCount
+        from user_answer
+        where appId = #{appId}
+        group by resultName
+        order by resultCount desc;
+    </select>
+</mapper>
